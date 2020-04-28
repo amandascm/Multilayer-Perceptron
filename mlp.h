@@ -6,8 +6,8 @@
 #define inLength 4
 #define hidLength 5
 #define outLength 3
-#define trainFile "iris.txt"
-#define testFile "iristest.txt"
+#define trainFile "train/iris.txt"
+#define testFile "test/iristest.txt"
 #define learningRate 0.1
 #define threshold 0.01
 
