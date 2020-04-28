@@ -13,35 +13,30 @@ float activFuncDeriv(float z);
 void forward(float* inVector, model* arch);
 void backpropagation(float X[][inLength], float Y[][outLength], model* arch);
 void fillRandom(model* arch);
+int countLines(FILE* file);
 
 
 //MAIN
 int main(){
-	int i, j, k=0;
+	int i, j, k=0, qtTestCases=0;
 	char c;
-	FILE *dataset;
+	float vec[inLength] = {0};
+	FILE *dataset, *test;
 	model arch; //struct contendo os pesos, biases e resultados mais recentes dos neuronios do MLP
 
 	
 	//acessando arquivo contendo dataset
-	dataset = fopen(inFile, "r");
+	dataset = fopen(trainFile, "r");
 	if(dataset == NULL){
-		printf("error opening dataset\n");
+		printf("error opening dataset file\n");
 		return -1;
 	}
 
 	//contando quantidade de linhas do dataset = quantidade de "casos treino" para o MLP
-	qtTrainCases = 0;
-	while(fscanf(dataset, "%c", &c) != EOF){
-		if(c == '\n'){
-			qtTrainCases++;
-		}
-	};
+	qtTrainCases = countLines(dataset);
 
 	//matrizes de entradas e de saidas para treinar o MLP
 	float X[qtTrainCases][inLength], Y[qtTrainCases][outLength];
-	
-	rewind(dataset);
 
 	//preenchendo matrizes com dados do dataset
 	for(i=0;i<qtTrainCases;i++){
@@ -58,25 +53,38 @@ int main(){
 	srand(time(0));
 	fillRandom(&arch);
 
+	//treinando MLP
 	backpropagation(X, Y, &arch);
 
 	//testando MLP
-	float vec[inLength] = {0};
-	printf("Digite as %d entradas da rede:\n", inLength);
-	for(i=0;i<inLength;i++){
-		scanf("%f", &vec[i]);
+
+	test = fopen(testFile, "r");
+	if(test == NULL){
+		printf("error opening test file\n");
+		return -1;
 	}
 
-	forward(vec, &arch);
-	
-	printf("RESULTADO = [");
-	for(i=0;i<outLength;i++){
-		if(i == outLength-1){
-			printf("%f]\n", arch.outResult[i]);
-		}else{
-			printf("%f, ", arch.outResult[i]);
+	qtTestCases = countLines(test);
+
+	for(i=0;i<qtTestCases;i++){
+
+		for(j=0;j<inLength;j++){
+			fscanf(test, "%f", &vec[j]);
 		}
+
+		forward(vec, &arch);
+		
+		printf("RESULTADO = [");
+		for(k=0;k<outLength;k++){
+			if(k == outLength-1){
+				printf("%.1f]\n", arch.outResult[k]);
+			}else{
+				printf("%.1f, ", arch.outResult[k]);
+			}
+		}
+
 	}
+	fclose(test);
 
 
 	return 0;

@@ -3,12 +3,13 @@
 
 
 //DEFINES
-#define inLength 2
-#define hidLength 2
-#define outLength 1
-#define inFile "xor.txt"
+#define inLength 4
+#define hidLength 5
+#define outLength 3
+#define trainFile "iris.txt"
+#define testFile "iristest.txt"
 #define learningRate 0.1
-#define threshold 0.001
+#define threshold 0.01
 
 //GLOBAL
 int qtTrainCases = 0; //quantidade de linhas do datase (casos teste para treinar o MLP)
@@ -25,6 +26,18 @@ typedef struct model{
 
 
 //FUNCTIONS BODIES
+
+int countLines(FILE* file){
+	int qtLines = 0;
+	char c;
+	while(fscanf(file, "%c", &c) != EOF){
+		if(c == '\n'){
+			qtLines++;
+		}
+	}
+	rewind(file);
+	return qtLines;
+}
 
 float activFunc(float z){
 	//sigmoide
