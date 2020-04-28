@@ -1,5 +1,3 @@
-//gcc mlpxor.c -lm -o exe
-
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
@@ -10,11 +8,11 @@
 #include "mlp.h"
 
 //FUNCTIONS
-float funcActiv(float z); //ok
-float derivFuncActiv(float z); //ok
-void forward(int* inVector, model* arch); //ok
-void backpropagation(int X[][inLength], int Y[][outputLength], model* arch);
-void fillRandom(model* arch); //ok
+float activFunc(float z);
+float activFuncDeriv(float z);
+void forward(float* inVector, model* arch);
+void backpropagation(float X[][inLength], float Y[][outLength], model* arch);
+void fillRandom(model* arch);
 
 
 //MAIN
@@ -32,7 +30,7 @@ int main(){
 		return -1;
 	}
 
-	//Contando quantidade de linhas do dataset = quantidade de "casos teste" para o MLP
+	//contando quantidade de linhas do dataset = quantidade de "casos treino" para o MLP
 	qtTrainCases = 0;
 	while(fscanf(dataset, "%c", &c) != EOF){
 		if(c == '\n'){
@@ -40,18 +38,18 @@ int main(){
 		}
 	};
 
-	//matrizes de entradas de saidas para treinar o MLP
-	int X[qtTrainCases][inLength], Y[qtTrainCases][outputLength];
+	//matrizes de entradas e de saidas para treinar o MLP
+	float X[qtTrainCases][inLength], Y[qtTrainCases][outLength];
 	
 	rewind(dataset);
 
-	//Preenchendo matrizes com dados do dataset
+	//preenchendo matrizes com dados do dataset
 	for(i=0;i<qtTrainCases;i++){
 		for(j=0;j<inLength;j++){
-			fscanf(dataset, "%d", &X[i][j]);
+			fscanf(dataset, "%f", &X[i][j]);
 		}
-		for(j=0;j<outputLength;j++){
-			fscanf(dataset, "%d", &Y[i][j]);
+		for(j=0;j<outLength;j++){
+			fscanf(dataset, "%f", &Y[i][j]);
 		}
 	}
 	fclose(dataset);
@@ -62,15 +60,23 @@ int main(){
 
 	backpropagation(X, Y, &arch);
 
-	//TESTANDO MLP
-	int vec[inLength] = {0};
+	//testando MLP
+	float vec[inLength] = {0};
 	printf("Digite as %d entradas da rede:\n", inLength);
 	for(i=0;i<inLength;i++){
-		scanf("%d", &vec[i]);
+		scanf("%f", &vec[i]);
 	}
 
 	forward(vec, &arch);
-	printf("RESULTADO = %f\n", arch.outputResult[0]);
+	
+	printf("RESULTADO = [");
+	for(i=0;i<outLength;i++){
+		if(i == outLength-1){
+			printf("%f]\n", arch.outResult[i]);
+		}else{
+			printf("%f, ", arch.outResult[i]);
+		}
+	}
 
 
 	return 0;
