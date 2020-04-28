@@ -1,6 +1,6 @@
 # Multilayer Perceptron (MLP)
 
-MLP com uma camada oculta e uma camada de saída. A quantidade de neurônios por camada, a quantidade de entradas, a taxa de aprendizagem e o erro médio máximo da rede são definidas no arquivo *mlp.h* e podem ser alterados ao redefinir os valores das seguintes constantes diretamente no arquivo:
+MLP com uma camada oculta e uma camada de saída. A quantidade de neurônios por camada, a quantidade de entradas, a taxa de aprendizagem e o erro médio máximo da rede são definidos no arquivo *mlp.h* e podem ser alterados ao redefinir os valores das seguintes constantes diretamente no arquivo:
 
   - *hidLength*: Quantidade de neurônios da camada oculta
   - *outLength*: Quantidade de neurônios da camada de saída
