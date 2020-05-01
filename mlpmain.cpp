@@ -1,3 +1,4 @@
+#include<iostream>
 #include<stdio.h>
 #include<stdlib.h>
 #include<math.h>
@@ -5,24 +6,16 @@
 #include<time.h>
 
 //BIBLIOTECA COM CLASSES E FUNCOES DO MLP
-#include "mlp.h"
+#include "mlp.hpp"
 
-//FUNCTIONS
-float activFunc(float z);
-float activFuncDeriv(float z);
-void forward(float* inVector, model* arch);
-void backpropagation(float X[][inLength], float Y[][outLength], model* arch);
-void fillRandom(model* arch);
-int countLines(FILE* file);
+using namespace std;
 
-
-//MAIN
 int main(){
-	int i, j, k=0, qtTestCases=0;
+	int i, j, k=0, qtTestCases=0, qtTrainCases=0;
 	char c;
 	float vec[inLength] = {0};
 	FILE *dataset, *test;
-	model arch; //struct contendo os pesos, biases e resultados mais recentes dos neuronios do MLP
+	model arch; //classe contendo os pesos, biases, resultados, informacoes e funcoes do MLP
 
 	
 	//acessando arquivo contendo dataset
@@ -33,7 +26,8 @@ int main(){
 	}
 
 	//contando quantidade de linhas do dataset = quantidade de "casos treino" para o MLP
-	qtTrainCases = countLines(dataset);
+	arch.setQtTrainCases(countLines(dataset));
+	qtTrainCases = arch.getQtTrainCases();
 
 	//matrizes de entradas e de saidas para treinar o MLP
 	float X[qtTrainCases][inLength], Y[qtTrainCases][outLength];
@@ -49,18 +43,13 @@ int main(){
 	}
 	fclose(dataset);
 
-	//definindo pesos e biases iniciais
-	srand(time(0));
-	fillRandom(&arch);
-
 	//treinando MLP
-	backpropagation(X, Y, &arch);
+	arch.backpropagation(X, Y);
 
 	//testando MLP
-
 	test = fopen(testFile, "r");
 	if(test == NULL){
-		printf("error opening test file\n");
+		cout << "error opening test file\n";
 		return -1;
 	}
 
@@ -72,17 +61,8 @@ int main(){
 			fscanf(test, "%f", &vec[j]);
 		}
 
-		forward(vec, &arch);
-		
-		printf("RESULTADO = [");
-		for(k=0;k<outLength;k++){
-			if(k == outLength-1){
-				printf("%.1f]\n", arch.outResult[k]);
-			}else{
-				printf("%.1f, ", arch.outResult[k]);
-			}
-		}
-
+		arch.forward(vec);
+		arch.printResult();
 	}
 	fclose(test);
 
