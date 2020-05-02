@@ -23,8 +23,8 @@ int countLines(FILE* file){
 	return qtLines;
 }
 
-//MODEL CLASS
-model::model(){
+//MLP CLASS
+mlp::mlp(){
 	//preenche matrizes de pesos e biases com numeros pseudoaleatorios entre -0.5 e 0.5
 	int i, j;
 	srand(time(0));
@@ -40,15 +40,15 @@ model::model(){
 	}
 }
 
-void model::setQtTrainCases(int x){
+void mlp::setQtTrainCases(int x){
 	qtTrainCases = x;
 }
 
-int model::getQtTrainCases(){
+int mlp::getQtTrainCases(){
 	return qtTrainCases;
 }
 
-void model::printResult(){
+void mlp::printResult(){
 	int k;
 	printf("RESULTADO = [");
 	for(k=0;k<outLength;k++){
@@ -60,17 +60,17 @@ void model::printResult(){
 	}
 }
 
-float model::activFunc(float z){
+float mlp::activFunc(float z){
 	//sigmoide
 	return (1.0/(1.0 + expf(-z)));
 }
 
-float model::activFuncDeriv(float z){
+float mlp::activFuncDeriv(float z){
 	//derivada sigmoide
 	return (z*(1.0 - z));
 }
 
-void model::forward(float* inVector){
+void mlp::forward(float* inVector){
 	int i, j;
 	float totalH = 0, totalO = 0;
 
@@ -93,7 +93,7 @@ void model::forward(float* inVector){
 	}
 }
 
-void model::backpropagation(float X[][inLength], float Y[][outLength]){
+void mlp::backpropagation(float X[][inLength], float Y[][outLength]){
 	int i, j, k;
 	float inVector[inLength] = {0};
 	float erro, sum, erroMLP = 2*threshold;

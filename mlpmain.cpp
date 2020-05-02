@@ -14,57 +14,55 @@ int main(){
 	int i, j, k=0, qtTestCases=0, qtTrainCases=0;
 	char c;
 	float vec[inLength] = {0};
-	FILE *dataset, *test;
-	model arch; //classe contendo os pesos, biases, resultados, informacoes e funcoes do MLP
+	FILE *trainDataset, *testDataset;
+	mlp mlp; //classe contendo os pesos, biases, resultados, informacoes e funcoes do MLP
 
 	
-	//acessando arquivo contendo dataset
-	dataset = fopen(trainFile, "r");
-	if(dataset == NULL){
-		printf("error opening dataset file\n");
+	//acessando arquivo contendo trainDataset
+	trainDataset = fopen(trainFile, "r");
+	if(trainDataset == NULL){
+		printf("error opening trainDataset file\n");
 		return -1;
 	}
 
-	//contando quantidade de linhas do dataset = quantidade de "casos treino" para o MLP
-	arch.setQtTrainCases(countLines(dataset));
-	qtTrainCases = arch.getQtTrainCases();
+	//contando quantidade de linhas do trainDataset = quantidade de "casos treino" para o MLP
+	mlp.setQtTrainCases(countLines(trainDataset));
+	qtTrainCases = mlp.getQtTrainCases();
 
 	//matrizes de entradas e de saidas para treinar o MLP
 	float X[qtTrainCases][inLength], Y[qtTrainCases][outLength];
 
-	//preenchendo matrizes com dados do dataset
+	//preenchendo matrizes com dados do trainDataset
 	for(i=0;i<qtTrainCases;i++){
 		for(j=0;j<inLength;j++){
-			fscanf(dataset, "%f", &X[i][j]);
+			fscanf(trainDataset, "%f", &X[i][j]);
 		}
 		for(j=0;j<outLength;j++){
-			fscanf(dataset, "%f", &Y[i][j]);
+			fscanf(trainDataset, "%f", &Y[i][j]);
 		}
 	}
-	fclose(dataset);
+	fclose(trainDataset);
 
 	//treinando MLP
-	arch.backpropagation(X, Y);
+	mlp.backpropagation(X, Y);
 
 	//testando MLP
-	test = fopen(testFile, "r");
-	if(test == NULL){
-		cout << "error opening test file\n";
+	testDataset = fopen(testFile, "r");
+	if(testDataset == NULL){
+		cout << "error opening testDataset file\n";
 		return -1;
 	}
 
-	qtTestCases = countLines(test);
+	qtTestCases = countLines(testDataset);
 
 	for(i=0;i<qtTestCases;i++){
-
 		for(j=0;j<inLength;j++){
-			fscanf(test, "%f", &vec[j]);
+			fscanf(testDataset, "%f", &vec[j]);
 		}
-
-		arch.forward(vec);
-		arch.printResult();
+		mlp.forward(vec);
+		mlp.printResult();
 	}
-	fclose(test);
+	fclose(testDataset);
 
 
 	return 0;

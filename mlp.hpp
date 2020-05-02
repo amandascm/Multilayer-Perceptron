@@ -5,7 +5,7 @@
 #define inLength 4
 #define hidLength 5
 #define outLength 3
-#define trainFile "train/iris.txt"
+#define trainFile "train/iristrain.txt"
 #define testFile "test/iristest.txt"
 #define learningRate 0.1
 #define threshold 0.01
@@ -14,7 +14,7 @@
 int countLines(FILE* file);
 
 //CLASSES
-class model{
+class mlp{
 	private:
 		float matH[hidLength][inLength+1]; //pesos+bias de cada neuronio da camada H em uma linha
 		float matO[outLength][hidLength+1]; //pesos+bias de cada neuronio da camada O em uma linha
@@ -22,7 +22,7 @@ class model{
 		float hidResult[hidLength]; //resultados obtidos em cada neuronio da camada H (apos aplicar funcao de ativacao)
 		int qtTrainCases;
 	public:
-		model();
+		mlp();
 		void setQtTrainCases(int x);
 		int getQtTrainCases();
 		void printResult();
