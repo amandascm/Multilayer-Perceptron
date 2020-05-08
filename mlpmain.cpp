@@ -16,7 +16,6 @@ int main(){
 	float vec[inLength] = {0};
 	FILE *trainDataset, *testDataset;
 	mlp mlp; //classe contendo os pesos, biases, resultados, informacoes e funcoes do MLP
-
 	
 	//acessando arquivo contendo trainDataset
 	trainDataset = fopen(trainFile, "r");
@@ -26,8 +25,7 @@ int main(){
 	}
 
 	//contando quantidade de linhas do trainDataset = quantidade de "casos treino" para o MLP
-	mlp.setQtTrainCases(countLines(trainDataset));
-	qtTrainCases = mlp.getQtTrainCases();
+	qtTrainCases = countLines(trainDataset);
 
 	//matrizes de entradas e de saidas para treinar o MLP
 	float X[qtTrainCases][inLength], Y[qtTrainCases][outLength];
@@ -44,7 +42,7 @@ int main(){
 	fclose(trainDataset);
 
 	//treinando MLP
-	mlp.backpropagation(X, Y);
+	mlp.backpropagation(X, Y, qtTrainCases);
 
 	//testando MLP
 	testDataset = fopen(testFile, "r");

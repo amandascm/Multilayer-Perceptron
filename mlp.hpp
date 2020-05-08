@@ -15,23 +15,18 @@ int countLines(FILE* file);
 
 //CLASSES
 class mlp{
-	private:
-		float matH[hidLength][inLength+1]; //pesos+bias de cada neuronio da camada H em uma linha
-		float matO[outLength][hidLength+1]; //pesos+bias de cada neuronio da camada O em uma linha
-		float outResult[outLength]; //resultados obtidos em cada neuronio da camada O (apos aplicar funcao de ativacao)
-		float hidResult[hidLength]; //resultados obtidos em cada neuronio da camada H (apos aplicar funcao de ativacao)
-		int qtTrainCases;
-	public:
-		mlp();
-		void setQtTrainCases(int x);
-		int getQtTrainCases();
-		void printResult();
-		float activFunc(float z);
-		float activFuncDeriv(float z);
-		void forward(float* inVector);
-		void backpropagation(float X[][inLength], float Y[][outLength]);
-
+private:
+	float matH[hidLength][inLength+1]; //pesos+bias de cada neuronio da camada H em uma linha
+	float matO[outLength][hidLength+1]; //pesos+bias de cada neuronio da camada O em uma linha
+	float outResult[outLength]; //resultados obtidos em cada neuronio da camada O (apos aplicar funcao de ativacao)
+	float hidResult[hidLength]; //resultados obtidos em cada neuronio da camada H (apos aplicar funcao de ativacao)
+public:
+	mlp();
+	void printResult();
+	float activFunc(float z);
+	float activFuncDeriv(float z);
+	void forward(float* inVector);
+	void backpropagation(float X[][inLength], float Y[][outLength], int qtTrainCases);
 };
-
 
 #endif

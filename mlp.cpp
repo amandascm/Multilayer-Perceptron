@@ -11,14 +11,20 @@
 using namespace std;
 
 //FUNCTION BODY
+
 int countLines(FILE* file){
 	int qtLines = 0;
-	char c;
-	while(fscanf(file, "%c", &c) != EOF){
-		if(c == '\n'){
-			qtLines++;
-		}
+	ssize_t retorno = 0;
+	char *buffer = NULL;
+	size_t sizebuff = 100;
+
+	retorno = getline(&buffer, &sizebuff, file);
+	while(retorno >= 0){
+		qtLines++;
+		retorno = getline(&buffer, &sizebuff, file);
 	}
+
+	free(buffer);
 	rewind(file);
 	return qtLines;
 }
@@ -38,14 +44,6 @@ mlp::mlp(){
 			matO[i][j] = 2.0f * ((float)rand() / (2.0f * (float)RAND_MAX)) - 0.5f;
 		}
 	}
-}
-
-void mlp::setQtTrainCases(int x){
-	qtTrainCases = x;
-}
-
-int mlp::getQtTrainCases(){
-	return qtTrainCases;
 }
 
 void mlp::printResult(){
@@ -93,7 +91,7 @@ void mlp::forward(float* inVector){
 	}
 }
 
-void mlp::backpropagation(float X[][inLength], float Y[][outLength]){
+void mlp::backpropagation(float X[][inLength], float Y[][outLength], int qtTrainCases){
 	int i, j, k;
 	float inVector[inLength] = {0};
 	float erro, sum, erroMLP = 2*threshold;
